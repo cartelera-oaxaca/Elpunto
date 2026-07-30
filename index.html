@@ -1,273 +1,151 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Delivery Beer El Punto - Sistema</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        body {
-            background-color: #0b0b0b;
-            color: #f3f3f3;
-            padding-bottom: 100px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: #0b0b0b;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        .badge-abierto {
-            background-color: transparent;
-            border: 1px solid #d4af37;
-            color: #d4af37;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .badge-productos {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            color: #d4af37;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-        .view-section {
-            display: none;
-            padding: 15px;
-        }
-        .view-section.active {
-            display: block;
-        }
-        /* Tarjetas de Productos (Lógica de Inventario) */
-        .product-card {
-            background-color: #161616;
-            border: 1px solid #262626;
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .product-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-        .product-img {
-            width: 55px;
-            height: 55px;
-            background-color: #fff;
-            border-radius: 10px;
-            object-fit: cover;
-            padding: 2px;
-        }
-        .product-details h4 {
-            color: #fff;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        .prices {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .price-now {
-            color: #d4af37;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .price-old {
-            color: #777;
-            text-decoration: line-through;
-            font-size: 12px;
-        }
-        .btn-agregar {
-            background-color: #d4af37;
-            color: #0b0b0b;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        /* Tarjeta de Ubicación */
-        .card-ubicacion {
-            background-color: #161616;
-            border: 1px solid #262626;
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 20px;
-        }
-        .card-ubicacion h3 {
-            color: #d4af37;
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-        .card-ubicacion p {
-            color: #b0b0b0;
-            font-size: 13.5px;
-            line-height: 1.4;
-        }
-        .map-box {
-            width: 100%;
-            height: 250px;
-            background-color: #222;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 12px;
-            border: 1px solid #333;
-        }
-        .map-box iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-        /* Barra de navegación inferior con iconos grandes */
-        .nav-bar {
-            position: fixed;
-            bottom: 15px;
-            left: 15px;
-            right: 15px;
-            background-color: #141414;
-            border: 1px solid #2a2a2a;
-            border-radius: 30px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 65px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-            z-index: 1000;
-        }
-        .nav-item {
-            background: none;
-            border: none;
-            color: #777;
-            font-size: 26px;
-            cursor: pointer;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s;
-        }
-        .nav-item.active {
-            color: #d4af37;
-        }
-        .cart-summary {
-            background-color: #161616;
-            border: 1px solid #262626;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery El Punto</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{background:#090d16;color:#f8fafc;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:16px;padding-bottom:110px}
+.cnt{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px}
+h2{font-size:20px;font-weight:700;text-align:center;letter-spacing:0.5px;color:#f1f5f9;margin-top:4px}
+.img-box{width:100%;height:230px;background:#1e293b;border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.08);box-shadow:0 10px 25px -5px rgba(0,0,0,0.5)}
+.img-box img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+.img-box:hover img{transform:scale(1.03)}
+.btn-wsp-flotante{position:absolute;bottom:14px;left:14px;right:14px;background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);color:#fff;padding:12px;border-radius:12px;text-align:center;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(22,163,74,0.4);z-index:5;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);border:1px solid rgba(255,255,255,0.15)}
+.btn-wsp-flotante:active{transform:scale(0.97)}
+.btn-est{padding:14px;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-align:center;user-select:none;width:100%;box-shadow:0 4px 15px rgba(0,0,0,0.3);transition:all 0.3s ease;letter-spacing:1px}
+.c-err{background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 20px rgba(239,68,68,0.3)}
+.c-ab{background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 20px rgba(16,185,129,0.3)}
+.nav-sec{display:flex;flex-direction:column;gap:14px;width:100%}
+
+/* Contenedor inferior flotante estilo Glassmorphism */
+.contenedor-botones-inferior {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(9, 13, 22, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+}
+
+/* Botones redondos de alta gama con relieve */
+.btn-redondo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-redondo:active {
+    transform: scale(0.90);
+    box-shadow: 0 2px 10px rgba(217, 119, 6, 0.3);
+}
+
+#v-cnt{display:none;width:100%;height:78vh;background:#1e293b;border-radius:18px;overflow:hidden;position:relative;margin-top:2px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 15px 35px rgba(0,0,0,0.6)}
+#v-cnt iframe{width:100%;height:100%;border:none}
+.c-v{position:absolute;top:10px;right:10px;background:rgba(15, 23, 42, 0.85);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.15);padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;z-index:10;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.4);transition:all 0.2s ease}
+.c-v:active{transform:scale(0.95)}
+</style>
 </head>
 <body>
+<div class="cnt">
+<h2>Delivery El Punto</h2>
 
-    <header>
-        <div class="badge-abierto">ABIERTO</div>
-        <div class="badge-productos" id="contador-productos">3 productos</div>
-    </header>
+<!-- Elementos que se ocultan al abrir un visor para dar espacio total -->
+<div id="panel-principal" class="nav-sec">
+<div class="img-box">
+<!-- La imagen lee directo de la variable configurada según tu Sheet -->
+<img id="imgA1" src="https://i.ibb.co/S7t5K5rF/26639.jpg" alt="Portada">
+<a class="btn-wsp-flotante" href="https://wa.me/525644276032?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank">💬 Chat Directo WhatsApp</a>
+</div>
 
-    <!-- VISTA 1: INICIO / CATÁLOGO -->
-    <div id="seccion-home" class="view-section active">
-        <div id="lista-productos">
-            <!-- Cargado dinámicamente desde la lógica de la hoja de inventario -->
-        </div>
-    </div>
+<button id="bEst" class="btn-est c-err" ontouchstart="_t=setTimeout(_s,1000);" ontouchend="clearTimeout(_t);" onmousedown="_t=setTimeout(_s,1000);" onmouseup="clearTimeout(_t);">CERRADO</button>
+</div>
 
-    <!-- VISTA 2: MAPA Y COBERTURA -->
-    <div id="seccion-mapa" class="view-section">
-        <div class="card-ubicacion">
-            <h3>Ubicación y Cobertura</h3>
-            <p>Col. Nuevo México, San Jacinto Amilpas, Oaxaca. Entrega en 10 min a la redonda. Pide antes de las 10pm.</p>
-            <div class="map-box">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3810.378912345678!2d-96.745!3d17.085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDA1JzA2LjAiTiA5NsKwNDQnNDIuMCJX!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-        </div>
-    </div>
+<!-- Visor en Pantalla Amplia -->
+<div id="v-cnt">
+<button class="c-v" onclick="_cv()">✖ Cerrar y Volver</button>
+<iframe id="mF" src=""></iframe>
+</div>
+</div>
 
-    <!-- VISTA 3: CARRITO -->
-    <div id="seccion-carrito" class="view-section">
-        <div class="cart-summary">
-            <h3 style="color: #d4af37; margin-bottom: 10px;">Tu Carrito</h3>
-            <p id="texto-carrito" style="color: #aaa;">No hay productos agregados todavía.</p>
-        </div>
-    </div>
+<!-- Botones redondos fijos en la parte inferior con toda la lógica intacta -->
+<div class="contenedor-botones-inferior">
+    <button class="btn-redondo" onclick="_v('cob')" title="Ver Cobertura">📶</button>
+    <button class="btn-redondo" onclick="_v('cat')" title="Ver Catálogo">🔆</button>
+</div>
 
-    <!-- Barra de Navegación Inferior (Iconos Grandes) -->
-    <nav class="nav-bar">
-        <button class="nav-item active" onclick="cambiarVista('home', this)" title="Inicio">🏠</button>
-        <button class="nav-item" onclick="cambiarVista('mapa', this)" title="Mapa y Cobertura">📍</button>
-        <button class="nav-item" onclick="cambiarVista('carrito', this)" title="Carrito">🛒</button>
-    </nav>
+<script>
+// Configuración de URLs basada en tu estructura de datos (Hoja 1)
+const CONFIG = {
+    imagenPortada: "https://i.ibb.co/Sk9yp8C/26392.jpg", // Aquí puedes cambiar la URL de la imagen cuando gustes
+    urlCobertura: "https://cartelera-oaxaca.github.io/Coberturaelpunto/",
+    urlCatalogo: "https://super-delivery-elpunto.netlify.app/"
+};
 
-    <script>
-        // Lógica de inventario sincronizada con la base de datos de la hoja
-        const inventario = [
-            { sku: "m00001", nombre: "lata 355M (Six)", precioAntes: 135, precioAhora: 120, stock: 22, img: "https://imgs.search.brave.com/LZU4bksG4frwEYtNNr6RFsS_o67MYufVy3xsNGShM6M/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9kb2pp/dzJtOXR2djA5LmNs/b3VkZnJvbnQubmV0/Lzg2MjA2L3Byb2R1/Y3QvWF9zaXgtbW9k/ZWxvLWVzcGVjaWFs/LWJvdGU3MjYxLnBu/Zz8xMTYmdGltZT0x/Nzc1MjUyMjAw" },
-            { sku: "m0001", nombre: "lata 355ml (Modelo)", precioAntes: 135, precioAhora: 120, stock: 10, img: "https://imgs.search.brave.com/YDkX4EKZ87E-YUvrMegxR7AtKaWJmcggdcglceZrRbY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9sYW1h/c2NoaXF1aXRhLmNv/bS9jZG4vc2hvcC9w/cm9kdWN0cy8yOTAz/X3NpeF9tb2RlbG9f/ZXNwZWNpYWxfODAw/eC5qcGc_dj0xNTg2/MDE3MTE2" },
-            { sku: "mausk0001", nombre: "modelo lata six", precioAntes: 135, precioAhora: 120, stock: 12, img: "https://imgs.search.brave.com/YDkX4EKZ87E-YUvrMegxR7AtKaWJmcggdcglceZrRbY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9sYW1h/c2NoaXF1aXRhLmNv/bS/jZG4vc2hvcC9w/cm9kdWN0cy8yOTAz/X3NpeF9tb2RlbG9f/ZXNwZWNpYWxfODAw/eC5qcGc_dj0xNTg2/MDE3MTE2" }
-        ];
+// Aplicar imagen de portada al cargar
+document.getElementById('imgA1').src = CONFIG.imagenPortada;
 
-        let carritoCount = 0;
+// Cargar estado guardado para que no se borre al recargar
+let _st = localStorage.getItem('_estadoNegocio') === 'true';
+let _t;
 
-        function renderizarProductos() {
-            const contenedor = document.getElementById('lista-productos');
-            contenedor.innerHTML = '';
-            inventario.forEach(prod => {
-                contenedor.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-info">
-                            <img src="${prod.img}" class="product-img" alt="${prod.nombre}">
-                            <div class="product-details">
-                                <h4>${prod.nombre}</h4>
-                                <div class="prices">
-                                    <span class="price-now">$${prod.precioAhora}</span>
-                                    <span class="price-old">$${prod.precioAntes}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn-agregar" onclick="agregarCarrito('${prod.nombre}')">+ Agregar</button>
-                    </div>
-                `;
-            });
-            document.getElementById('contador-productos').innerText = `${inventario.length} productos`;
-        }
+function actualizarUI() {
+    let e = document.getElementById('bEst');
+    if(_st){
+        e.className="btn-est c-ab";
+        e.innerText="ABIERTO";
+    } else {
+        e.className="btn-est c-err";
+        e.innerText="CERRADO";
+    }
+}
+actualizarUI();
 
-        function agregarCarrito(nombre) {
-            carritoCount++;
-            document.getElementById('texto-carrito').innerText = `Tienes ${carritoCount} producto(s) en tu orden activa. ¡Listo para cobrar!`;
-            alert(`¡${nombre} agregado al pedido!`);
-        }
+function _s(){
+    _st = !_st;
+    localStorage.setItem('_estadoNegocio', _st);
+    actualizarUI();
+}
 
-        function cambiarVista(vista, elemento) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById('seccion-' + vista).classList.add('active');
-            elemento.classList.add('active');
-        }
+function _v(tipo){
+    let u = (tipo === 'cob') ? CONFIG.urlCobertura : CONFIG.urlCatalogo;
+    // Oculta portada y estado para dar espacio limpio al visor
+    document.getElementById('panel-principal').style.display = 'none';
+    let v = document.getElementById('v-cnt');
+    let m = document.getElementById('mF');
+    m.src = u;
+    v.style.display = "block";
+}
 
-        // Inicializar app
-        renderizarProductos();
-    </script>
+function _cv(){
+    let v = document.getElementById('v-cnt');
+    let m = document.getElementById('mF');
+    m.src = "";
+    v.style.display = "none";
+    // Regresa la portada original
+    document.getElementById('panel-principal').style.display = 'flex';
+}
+</script>
 </body>
 </html>
