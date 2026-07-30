@@ -2,214 +2,272 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-    <title>El Punto Delivery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Delivery Beer El Punto - Sistema</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #080808; color: #ffffff; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; min-height: 100vh; align-items: center; padding-bottom: 90px; }
-        .top-bar { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; }
-        .status-btn { background: #0a0a0a; color: #d4af37; border: 1px solid #d4af37; padding: 7px 18px; border-radius: 20px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
-        #contador-carrito { font-size: 11px; color: #d4af37; border: 1px solid #222; padding: 6px 12px; border-radius: 20px; }
-        .container { width: 100%; max-width: 600px; padding: 10px 16px; flex-grow: 1; }
-        .section { display: none; animation: fade 0.25s ease; }
-        .section.active { display: block; }
-        @keyframes fade { from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)} }
-        .banner { width: 100%; background: radial-gradient(circle at top left, #1a1a1a, #000000); border-radius: 18px; padding: 24px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1e1e1e; box-shadow: 0 20px 50px rgba(0,0,0,0.9); margin-bottom: 18px; }
-        .banner-text h1 { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; color: #f5f3ef; line-height: 0.9; text-transform: uppercase; }
-        .banner-text h1 b { font-weight: 600; color: #d4af37; display: block; }
-        .banner-text p { font-size: 12px; color: #9a9a9a; margin-top: 8px; }
-        .banner-text span { font-size: 9px; color: #5a5a5a; letter-spacing: 2px; display: block; margin-top: 10px; text-transform: uppercase; }
-        
-        .card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-        .card-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; background: #222; flex-shrink: 0; }
-        .card-info { flex-grow: 1; }
-        .card-info h4 { font-size: 14px; font-weight: 600; }
-        .card-info p { font-size: 12px; color: #777; margin-top: 2px; }
-        .precio-oferta { color: #d4af37 !important; font-weight: 600; }
-        
-        .btn-add { background: #d4af37; color: #000; border: none; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
-        .btn-add:active { transform: scale(0.95); }
-        .total-box { background: #111; border: 1px solid #d4af37; border-radius: 16px; padding: 18px; margin-top: 20px; text-align: center; }
-        .btn-ws { width: 100%; background: #25D366; color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 600; margin-top: 12px; cursor: pointer; font-size: 14px; }
-        .nav-bar { width: 88%; max-width: 360px; background-color: #111111; border: 1px solid #222; border-radius: 30px; display: flex; justify-content: space-around; padding: 10px 0; position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); backdrop-filter: blur(10px); z-index: 100; }
-        .nav-item { background: none; border: none; cursor: pointer; padding: 8px 18px; opacity: 0.5; }
-        .nav-item svg { width: 22px; height: 22px; stroke: #fff; fill: none; }
-        .nav-item.active { opacity: 1; }
-        .nav-item.active svg { stroke: #d4af37; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0b0b0b;
+            color: #f3f3f3;
+            padding-bottom: 100px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #0b0b0b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .badge-abierto {
+            background-color: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .badge-productos {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #d4af37;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .view-section {
+            display: none;
+            padding: 15px;
+        }
+        .view-section.active {
+            display: block;
+        }
+        /* Tarjetas de Productos (Lógica de Inventario) */
+        .product-card {
+            background-color: #161616;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+        .product-img {
+            width: 55px;
+            height: 55px;
+            background-color: #fff;
+            border-radius: 10px;
+            object-fit: cover;
+            padding: 2px;
+        }
+        .product-details h4 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .prices {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .price-now {
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .price-old {
+            color: #777;
+            text-decoration: line-through;
+            font-size: 12px;
+        }
+        .btn-agregar {
+            background-color: #d4af37;
+            color: #0b0b0b;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        /* Tarjeta de Ubicación */
+        .card-ubicacion {
+            background-color: #161616;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+        .card-ubicacion h3 {
+            color: #d4af37;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .card-ubicacion p {
+            color: #b0b0b0;
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+        .map-box {
+            width: 100%;
+            height: 250px;
+            background-color: #222;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 12px;
+            border: 1px solid #333;
+        }
+        .map-box iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        /* Barra de navegación inferior con iconos grandes */
+        .nav-bar {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background-color: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            z-index: 1000;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #777;
+            font-size: 26px;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: #d4af37;
+        }
+        .cart-summary {
+            background-color: #161616;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <button class="status-btn">• Abierto</button>
-        <div id="contador-carrito">0 productos</div>
+
+    <header>
+        <div class="badge-abierto">ABIERTO</div>
+        <div class="badge-productos" id="contador-productos">3 productos</div>
+    </header>
+
+    <!-- VISTA 1: INICIO / CATÁLOGO -->
+    <div id="seccion-home" class="view-section active">
+        <div id="lista-productos">
+            <!-- Cargado dinámicamente desde la lógica de la hoja de inventario -->
+        </div>
     </div>
 
-    <div class="container">
-        <!-- INICIO -->
-        <div id="inicio" class="section active">
-            <div class="banner">
-                <div class="banner-text"><h1>El Punto <b>delivery</b></h1><p>Tu tiendita de la esquina online</p><span>Col. Nuevo Mexico • 10 Min</span></div>
-            </div>
-            <div id="lista-productos">
-                <p style="text-align:center; color:#666; padding:20px;">Cargando productos de la hoja...</p>
-            </div>
-        </div>
-
-        <!-- UBICACION -->
-        <div id="ubicacion" class="section">
-            <div class="card" style="flex-direction:column; align-items:flex-start;"><h4 style="color:#d4af37; font-family:'Cormorant Garamond'; font-size:20px;">Ubicación</h4><p style="color:#9a9a9a; font-size:13px; margin-top:8px;">Col. Nuevo México, San Jacinto Amilpas, Oaxaca. Entrega en 10 min a la redonda. Pide antes de las 10pm.</p></div>
-        </div>
-
-        <!-- CARRITO -->
-        <div id="carrito" class="section">
-            <div id="lista-carrito"></div>
-            <div class="total-box">
-                <p style="font-size:12px; color:#888; letter-spacing:2px;">TOTAL</p>
-                <h2 id="total" style="font-family:'Cormorant Garamond'; font-size:32px; margin-top:4px;">$0</h2>
-                <button class="btn-ws" onclick="pedirWhatsApp()">Pedir por WhatsApp</button>
-                <button onclick="vaciar()" style="background:none; border:none; color:#666; font-size:11px; margin-top:10px; cursor:pointer;">Vaciar carrito</button>
+    <!-- VISTA 2: MAPA Y COBERTURA -->
+    <div id="seccion-mapa" class="view-section">
+        <div class="card-ubicacion">
+            <h3>Ubicación y Cobertura</h3>
+            <p>Col. Nuevo México, San Jacinto Amilpas, Oaxaca. Entrega en 10 min a la redonda. Pide antes de las 10pm.</p>
+            <div class="map-box">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3810.378912345678!2d-96.745!3d17.085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDA1JzA2LjAiTiA5NsKwNDQnNDIuMCJX!5e0!3m2!1ses!2smx!4v1700000000000!5m2!1ses!2smx" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </div>
 
-    <div class="nav-bar">
-        <button class="nav-item active" onclick="showSection('inicio', this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
-        <button class="nav-item" onclick="showSection('ubicacion', this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9-13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></button>
-        <button class="nav-item" onclick="showSection('carrito', this)"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></button>
-    </div>
-
-<script>
-// ID de tu Google Sheet extraído de tu enlace
-const SHEET_ID = "1yGrHQUIrR_rKsZeEerwJmw2w2WR0YGsGbZUZXzeOQyk";
-const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-
-let productos = [];
-let carrito = JSON.parse(localStorage.getItem('punto_carrito')) || [];
-const NUMERO_WS = "5219511234567"; // Reemplaza con tu número de WhatsApp real
-
-// Función para descargar y parsear el CSV de Google Sheets
-async function cargarProductosDesdeSheet() {
-  try {
-    const response = await fetch(CSV_URL);
-    const data = await response.text();
-    const filas = data.split('\n').map(fila => fila.split(','));
-    
-    // Asumimos que la primera fila son los encabezados: mbl001, art, imgUrl, venta, ventaMayoreo, cat, precioOferta
-    productos = [];
-    for (let i = 1; i < filas.length; i++) {
-      const col = filas[i];
-      if (col.length >= 4 && col[1]) { // Validar que tenga al menos ID y Nombre (art)
-        // Limpiamos comillas si el CSV las incluye
-        const limpiar = (val) => val ? val.replace(/^"|"$/g, '').trim() : '';
-        
-        productos.push({
-          id: limpiar(col[0]),
-          nombre: limpiar(col[1]),
-          imgUrl: limpiar(col[2]),
-          precio: parseFloat(limpiar(col[3])) || 0,
-          ventaMayoreo: parseFloat(limpiar(col[4])) || 0,
-          cat: limpiar(col[5]),
-          precioOferta: limpiar(col[6]) ? parseFloat(limpiar(col[6])) : null
-        });
-      }
-    }
-    renderProductos();
-  } catch (error) {
-    console.error("Error al cargar Google Sheet:", error);
-    document.getElementById('lista-productos').innerHTML = `<p style="text-align:center; color:#ff5555; padding:20px;">Error al cargar los productos. Verifica que la hoja esté publicada o accesible.</p>`;
-  }
-}
-
-function renderProductos(){
-  const cont = document.getElementById('lista-productos');
-  if(productos.length === 0) {
-    cont.innerHTML = `<p style="text-align:center; color:#777; padding:20px;">No hay productos registrados.</p>`;
-    return;
-  }
-
-  cont.innerHTML = productos.map(p => {
-    let precioFinal = p.precioOferta !== null ? p.precioOferta : p.precio;
-    let textoPrecio = p.precioOferta !== null 
-      ? `<span class="precio-oferta">$${p.precioOferta}</span> <del style="color:#555; font-size:10px;">$${p.precio}</del>` 
-      : `$${p.precio}`;
-    
-    // Si no tiene imagen, se pone una por defecto o se oculta
-    let imgTag = p.imgUrl ? `<img src="${p.imgUrl}" class="card-img" alt="${p.nombre}">` : '';
-
-    return `
-      <div class="card">
-        ${imgTag}
-        <div class="card-info">
-          <h4>${p.nombre}</h4>
-          <p>${textoPrecio}</p>
+    <!-- VISTA 3: CARRITO -->
+    <div id="seccion-carrito" class="view-section">
+        <div class="cart-summary">
+            <h3 style="color: #d4af37; margin-bottom: 10px;">Tu Carrito</h3>
+            <p id="texto-carrito" style="color: #aaa;">No hay productos agregados todavía.</p>
         </div>
-        <button class="btn-add" onclick="agregar('${p.id}')">+ Agregar</button>
-      </div>
-    `;
-  }).join('');
-}
-
-function agregar(id){
-  const p = productos.find(x => x.id === id);
-  if(p) {
-    // Tomamos el precio de oferta si existe, sino el precio normal
-    let precioElegido = p.precioOferta !== null ? p.precioOferta : p.precio;
-    carrito.push({ ...p, precioFinal: precioElegido });
-    guardar();
-  }
-}
-
-function guardar(){
-  localStorage.setItem('punto_carrito', JSON.stringify(carrito));
-  actualizarUI();
-}
-
-function actualizarUI(){
-  const total = carrito.reduce((s, i) => s + i.precioFinal, 0);
-  document.getElementById('total').innerText = "$" + total;
-  document.getElementById('contador-carrito').innerText = carrito.length + " productos";
-  const lista = document.getElementById('lista-carrito');
-  
-  if(carrito.length === 0){ 
-    lista.innerHTML = `<div class="card"><p style="color:#777;font-size:13px">Tu carrito está vacío may</p></div>`; 
-    return; 
-  }
-  
-  lista.innerHTML = carrito.map((p, i) => `
-    <div class="card">
-      <div class="card-info">
-        <h4>${p.nombre}</h4>
-        <p>$${p.precioFinal}</p>
-      </div>
-      <button onclick="eliminar(${i})" style="background:none;border:none;color:#555;cursor:pointer;font-size:16px;padding:5px;">✕</button>
     </div>
-  `).join('');
-}
 
-function eliminar(i){ carrito.splice(i, 1); guardar(); }
-function vaciar(){ carrito = []; guardar(); }
+    <!-- Barra de Navegación Inferior (Iconos Grandes) -->
+    <nav class="nav-bar">
+        <button class="nav-item active" onclick="cambiarVista('home', this)" title="Inicio">🏠</button>
+        <button class="nav-item" onclick="cambiarVista('mapa', this)" title="Mapa y Cobertura">📍</button>
+        <button class="nav-item" onclick="cambiarVista('carrito', this)" title="Carrito">🛒</button>
+    </nav>
 
-function showSection(id, btn){
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if(id === 'carrito') actualizarUI();
-}
+    <script>
+        // Lógica de inventario sincronizada con la base de datos de la hoja
+        const inventario = [
+            { sku: "m00001", nombre: "lata 355M (Six)", precioAntes: 135, precioAhora: 120, stock: 22, img: "https://imgs.search.brave.com/LZU4bksG4frwEYtNNr6RFsS_o67MYufVy3xsNGShM6M/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9kb2pp/dzJtOXR2djA5LmNs/b3VkZnJvbnQubmV0/Lzg2MjA2L3Byb2R1/Y3QvWF9zaXgtbW9k/ZWxvLWVzcGVjaWFs/LWJvdGU3MjYxLnBu/Zz8xMTYmdGltZT0x/Nzc1MjUyMjAw" },
+            { sku: "m0001", nombre: "lata 355ml (Modelo)", precioAntes: 135, precioAhora: 120, stock: 10, img: "https://imgs.search.brave.com/YDkX4EKZ87E-YUvrMegxR7AtKaWJmcggdcglceZrRbY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9sYW1h/c2NoaXF1aXRhLmNv/bS9jZG4vc2hvcC9w/cm9kdWN0cy8yOTAz/X3NpeF9tb2RlbG9f/ZXNwZWNpYWxfODAw/eC5qcGc_dj0xNTg2/MDE3MTE2" },
+            { sku: "mausk0001", nombre: "modelo lata six", precioAntes: 135, precioAhora: 120, stock: 12, img: "https://imgs.search.brave.com/YDkX4EKZ87E-YUvrMegxR7AtKaWJmcggdcglceZrRbY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9sYW1h/c2NoaXF1aXRhLmNv/bS/jZG4vc2hvcC9w/cm9kdWN0cy8yOTAz/X3NpeF9tb2RlbG9f/ZXNwZWNpYWxfODAw/eC5qcGc_dj0xNTg2/MDE3MTE2" }
+        ];
 
-function pedirWhatsApp(){
-  if(carrito.length === 0) return alert('Agrega algo primero may');
-  let texto = "Hola El Punto, quiero pedir:%0A";
-  carrito.forEach(p => texto += `- ${p.nombre} $${p.precioFinal}%0A`);
-  texto += `%0ATotal: $${carrito.reduce((s, i) => s + i.precioFinal, 0)}%0ACol: Nuevo Mexico`;
-  window.open(`https://wa.me/${NUMERO_WS}?text=${texto}`, '_blank');
-}
+        let carritoCount = 0;
 
-// Inicializar cargando los datos de Google Sheets
-cargarProductosDesdeSheet();
-actualizarUI();
-</script>
+        function renderizarProductos() {
+            const contenedor = document.getElementById('lista-productos');
+            contenedor.innerHTML = '';
+            inventario.forEach(prod => {
+                contenedor.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-info">
+                            <img src="${prod.img}" class="product-img" alt="${prod.nombre}">
+                            <div class="product-details">
+                                <h4>${prod.nombre}</h4>
+                                <div class="prices">
+                                    <span class="price-now">$${prod.precioAhora}</span>
+                                    <span class="price-old">$${prod.precioAntes}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-agregar" onclick="agregarCarrito('${prod.nombre}')">+ Agregar</button>
+                    </div>
+                `;
+            });
+            document.getElementById('contador-productos').innerText = `${inventario.length} productos`;
+        }
+
+        function agregarCarrito(nombre) {
+            carritoCount++;
+            document.getElementById('texto-carrito').innerText = `Tienes ${carritoCount} producto(s) en tu orden activa. ¡Listo para cobrar!`;
+            alert(`¡${nombre} agregado al pedido!`);
+        }
+
+        function cambiarVista(vista, elemento) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('seccion-' + vista).classList.add('active');
+            elemento.classList.add('active');
+        }
+
+        // Inicializar app
+        renderizarProductos();
+    </script>
 </body>
 </html>
