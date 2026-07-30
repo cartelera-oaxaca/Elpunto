@@ -1,3 +1,107 @@
-<!-- El Punto Delivery - Código Seguro -->
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Tienda Express 20 Min</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}body{background:#121212;color:#fff}.top{position:sticky;top:0;z-index:999;background:#111;display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #222}.btnO{border:none;border-radius:20px;padding:7px 16px;font-weight:900}.open{background:#00c853;color:#fff}.closed{background:#d50000;color:#fff}.cartBtn{background:#fff;border:none;border-radius:20px;padding:8px 16px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px}.card{background:#1e1e1e;border:1px solid #2c2c2c;border-radius:14px;padding:10px;text-align:center}.card img{width:100%;height:160px;object-fit:cover;border-radius:8px}.antes{text-decoration:line-through;color:#aaa;font-size:13px}.ahora{color:#ff5252;font-weight:900;font-size:18px}#map{height:250px;border-radius:12px;margin-top:6px}#cartModal{position:fixed;inset:0;background:#181818;display:none;z-index:99999}#cartModal.show{display:flex;flex-direction:column}.panel{background:#181818;width:100%;height:100%;display:flex;flex-direction:column;overflow-y:auto}.qty-btn{background:#333;color:#fff;border:none;width:30px;height:30px;border-radius:6px}</style></head><body><div class="top"><button id="openBtn" class="btnO open">ABIERTO</button><button class="cartBtn" onclick="_0x1b()">🛒 <span id="tot">$0</span> (<span id="cnt">0</span>)</button></div><div id="bR" style="background:#e30613;color:#fff;text-align:center;padding:8px;font-weight:800;display:none"></div><div id="lg" style="text-align:center;background:#181818;padding:10px;display:none"></div><div id="bA" style="background:#ffeb3b;color:#000;text-align:center;padding:8px;display:none"></div><div style="display:flex;gap:10px;padding:12px"><a href="https://cartelera-oaxaca.github.io/Coberturaelpunto/" target="_blank" style="flex:1;background:#1e1e1e;border:1px solid #333;color:#fff;padding:12px;border-radius:10px;text-align:center;text-decoration:none;font-weight:bold">📍 Cobertura</a><a id="aAyu" href="#" style="flex:1;background:#25D366;color:#fff;padding:12px;border-radius:10px;text-align:center;text-decoration:none;display:none;font-weight:bold">💬 Ayuda</a></div><div id="grid" class="grid"></div><div id="cartModal"><div class="panel"><div style="display:flex;justify-content:space-between;padding:16px;border-bottom:1px solid #2c2c2c;position:sticky;top:0;background:#111"><span>Tu pedido</span><button onclick="document.getElementById('cartModal').classList.remove('show')" style="background:none;border:none;color:#fff;font-size:22px">×</button></div><div style="padding:12px"><div id="items"></div><div id="map"></div><p id="msg" style="color:#ff5252;font-size:12px"></p><div style="display:flex;justify-content:space-between;font-weight:900;margin-top:12px"><span>Total</span><span id="tot2">$0</span></div><button onclick="_0x1c()" style="width:100%;background:#00c853;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:900;margin-top:14px">Confirmar WhatsApp</button></div></div></div><script>eval(atob('Y29uc3QgXzB4M2E9Imh0dHBzOi8vZG9jcy5nb29nbGUuY29tL3NwcmVhZHNoZWV0cy9kLzF3MmxIMTNRbDlwb1AtSjJudVlKem9KbU15ZVVFkSGxhZFBBSSVFMmppSmMvZXhwb3J0P2Zvcm1hdD1jc3YiO2NvbnN0IF8weDNiPVtbMTcuMDY3NTg5NTQwNTE4NjE4LC05Ni43NDA3MTMxMTk1MDY4NCddLFsxNy4xMDU4Mzk1NTc5NjMyNTcsLTk2Ljc2MTY1NTgwNzQ5NTEyXSxbMTcuMTAwNDIyMDAzMDY1NDUsLTk2Ljc3MjI5ODgxMjg2NjIzXSxbMTcuMDY1MzU0NTc0NTExNzcsLTk2Ljc1MTU5OTMxMjcwMTc0XV07bGV0IF8weDQxPVtdLF8weDQyPUpTT04ucGFyc2UobG9jYWxTdG9yYWdlLmdldEl0ZW0oJ19jX3AnKXx8J1tdJyksXzB4NDM9bG9jYWxTdG9yYWdlLmdldEl0ZW0oJ19jX28nKSE9PScwJyxfMHg0NCxfMHg0NSxfMHg0NixfMHg0Nz1udWxsLF8weF9jbGlja3M9MCxfMHhfdGltZXI9bnVsbDtmdW5jdGlvbiBfMHgyMShfMHg1MSl7aWYoIV8weDUxKXJldHVybiBudWxsO18weDUxPV8weDUxLnRvU3RyaW5nKCkudHJpbSgpLnJlcGxhY2UoL1wiL2csJycpO2xldCBfMHg1Mj1fMHg1MS5tYXRjaCgvKGh0dHBzPzpcL1wvW15cc10rKS8pO2lmKCFfMHg1MikgcmV0dXJuIG51bGw7bGV0IF8weDUzPV8weDUyWzBdLF8weDU0PV8weDUxLnJlcGxhY2UoXzB4NTMsJycpLnRyaW0oKS5zcGxpdCgvXHMvKS5maWx0ZXIoQm9vbGVhbik7bGV0IF8weDU1PW51bGwsXzB4NTY9bnVsbDtpZihfMHg1NC5sZW5ndGg+PTIpe18weDU1PXBhcnNlRmxvYXQoXzB4NTRbMF0pO18weDU2PXBhcnNlRmxvYXQoXzB4NTRbMV0pO31lbHNlIGlmKF8weDU0Lmxlbmd0aD09MSl7XzB4NTY9cGFyc2VGbG9hdChfMHg1NFswXSk7fXJldHVybiB7aW1nOl8weDUzLGFudGVzOl8weDU1LGFob3JhOl8weDU2fTsgfQpmdW5jdGlvbiBfMHgyMihfMHg1OCl7bGV0IF8weDU5PShfMHg1YSktPl8weDU4W18weDVhXT8uWzBdPy5yZXBsYWNlKC9cIi9nLCcnKS50cmltKCl8fCIiO2xldCBfMHg1Yj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYlInKSxfMHg1Yz1fMHg1OSgxKTtpZighXzB4NWMpe18weDViLnN0eWxlLmRpc3BsYXk9J25vbmUnfWVsc2V7XzB4NWIuc3R5bGUuZGlzcGxheT0nYmxvY2snO18weDViLmlubmVySFRNTD1fMHg1Yy5pbmNsdWRlcygnaHR0cCcpPGA8aW1nIHNyYz0iJHtfMHg1Y30iIHN0eWxlPSJ3aWR0aDoxMDAlO21heC1oZWlnaHQ6OTBweDtvYmplY3QtZml0OmNvbnRhaW4iPmA6XzB4NWM7fWxldCBfMHg1ZD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbGcnKTtfMHg1Yz1fMHg1OSgyKTtpZighXzB4NWMgfHwhXzB4NWMuaW5jbHVkZXMoJ2h0dHAnKSl7XzB4NWQuc3R5bGUuZGlzcGxheT0nbm9uZSd9ZWxzZXtfMHg1ZC5zdHlsZS5kaXNwbGF5PSdibG9jayc7XzB4NWQuaW5uZXJIVE1MPTA8aW1nIHNyYz0iJHtfMHg1Y30iIHN0eWxlPSJtYXgtaGVpZ2h0OjcwcHg7b2JqZWN0LWZpdDpjb250YWluIj5gO31sZXQgXzB4NWU9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2JBJyk7XzB4NWM9XzB4NTkoMyk7aWYoIV8weDVjKXtfMHg1ZS5zdHlsZS5kaXNwbGF5PSdub25lJ31lbHNle18weDVlLnN0eWxlLmRpc3BsYXk9J2Jsb2NrJztfMHg1ZS5pbm5lckhUTUw9XzB4NWMuaW5jbHVkZXMoJ2h0dHAnKT9gPGltZyBzcmM9IiR7XzB4NWN9IiBzdHlsZT0id2lkdGg6MTAwJTttYXgtaGVpZ2h0OjE1MHB4O29iamVjdC1maXQ6Y29udGFpbiI+YDpfMHg1Yzt9fWZ1bmN0aW9uIF8weDIzKCl7bGV0IF8weDYxPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdncmlkJyk7XzB4NjEuaW5uZXJIVE1MPSIiO18weDQxLmZvckVhY2goKF8weDYyLF8weDYzKT0+e18weDYxLmlubmVySFRNTCs9YDxkaXYgY2xhc3M9ImNhcmQiIG9uY2xpY2s9ImlmKF8weDQxWyR7XzB4NjN9XS5saW5rKXdpbmRvdy5vcGVuKF8weDQxWyR7XzB4NjN9XS5saW5rKSI+CiAgICAgIDxpbWcgc3JjPSIke18weDYyLmltZ30iIGxvYWRpbmc9ImxhenkiPgogICAgICA8ZGl2IHN0eWxlPSJ0ZXh0LWFsaWduOmNlbnRlcjttYXJnaW4tdG9wOjZweCI+JHtfMHg2Mi5hbnRlcz9gPHNwYW4gY2xhc3M9ImFudGVzIj4kJHtfMHg2Mi5hbnRlc308L3NwYW4+YDogJyd9PHNwYW4gY2xhc3M9ImFob3JhIj4kJHtfMHg2Mi5haG9yYXx8XzB4NjIuYW50ZXN8fCcnfTwvc3Bhbj48L2Rpdj4KICAgICAgPGJ1dHRvbiBvbmNsaWNrPSJldmVudC5zdG9wUHJvcGFnYXRpb24oKTtfMHgyNigke18weDYzfSkiIHN0eWxlPSJ3aWR0aDoxMDAlO2JhY2tncm91bmQ6I2ZmZjtjb2xvcjojMDAwO2JvcmRlcjpub25lO3BhZGRpbmc6OXB4O2JvcmRlci1yYWRpdXM6OHB4O21hcmdpbi10b3A6OHB4O2N1cnNvcjpwb2ludGVyO2ZvbnQtd2VpZ2h0OmJvbGQiPkFncmVnYXI8L2J1dHRvbj4KICAgIDwvZGl2PmA7IH0pO31mdW5jdGlvbiBfMHgxYSgpe18weF9jbGlja3MrKztjbGVhclRpbWVvdXQoXzB4X3RpbWVyKTtpZihfMHhfY2xpY2tzPj0xMCl7XzB4X2NsaWNrcz0wO18weDQzPSFfMHg0Mztsb2NhbFN0b3JhZ2Uuc2V0SXRlbSgnX2NfbycsXzB4NDM/JzEnOicwJyk7XzB4MjQoKTt9ZWxzZXtfMHhfdGltZXI9c2V0VGltZW91dCgoKT0+e18weF9jbGlja3M9MDt9LDE1MDApO319ZnVuY3Rpb24gXzB4MjQoKXtsZXQgXzB4NjU9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ29wZW5Ccm4nKTtfMHg2NS50ZXh0Q29udGVudD1fMHg0Mz8nQUJJRVJUTyc6J0NFUlJBRE8nO18weDY1LmNsYXNzTmFtZT0nYmV0TycrKF8weDQzPydvcGVuJzonY2xvc2VkJyk7fWZ1bmN0aW9uIF8weDI2KF8weDYzKXtsZXQgXzB4NjI9XzB4NDFbXzB4NjNdLF8weDY2PV8weDQyLmZpbmQoXzB4Njc9Pl8weDY3LmltZz09PV8weDYyLmltZyk7aWYoXzB4NjYpXzB4NjYuY2FudCsrO2Vsc2UgXzB4NDIucHVzaCh7Li4uXzB4NjIsY2FudDoxfSk7XzB4MjgoKTt9ZnVuY3Rpb24gXzB4MjcoXzB4NjgsXzB4Njkpe18weDQyW18weDY4XS5jYW50Kz1fMHg2OTtpZihfMHg0MltfMHg2OF0uY2FudDw9MClfMHg0Mi5zcGxpY2UoXzB4NjgsMSk7XzB4MjgoKTt9ZnVuY3Rpb24gXzB4MjgoKXtsb2NhbFN0b3JhZ2Uuc2V0SXRlbSgnX2NfcCcsSlNPTi5zdHJpbmdpZnkoXzB4NDIpKTtfMHgyOSgpO31mdW5jdGlvbiBfMHgyOSgpe2xldCBfMHg2YT0wLF8weDZiPTA7XzB4NDIuZm9yRWFjaChfMHg2Yz0+e18weDZhKz0oXzB4NmMuYWhvcmF8fF8weDZjLmFudGVzfHwwKSpfMHg2Yy5jYW50O18weDZiKz1fMHg2Yy5jYW50O30pO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0b3QnKS50ZXh0Q29udGVudD0nJCcrXzB4NmE7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3RvdDInKS50ZXh0Q29udGVudD0nJCcrXzB4NmE7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NudCcpLnRleHRDb250ZW50PV8weDZiO2xldCBfMHg2ZD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnaXRlbXMnKTtfMHg2ZC5pbm5lckhUTUw9Jyc7XzB4NDIuZm9yRWFjaCgoXzB4NmMsXzB4NjgpPT57XzB4NmQuaW5uZXJIVE1MKz1gPGRpdiBzdHlsZT0iZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtnYXA6MTBweDttYXJnaW4tYm90dG9tOjEwcHg7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzJjMmMyYzsiPgogICAgICA8aW1nIHNyYz0iJHtfMHg2Yy5pbWd9IiBzdHlsZT0id2lkdGg6NTVweDtoZWlnaHQ6NTVweDtvYmplY3QtZml0OmNvdmVyO2JvcmRlci1yYWRpdXM6OHB4Ij4KICAgICAgPGRpdiBzdHlsZT0iZmxleDoxIj4KICAgICAgICA8ZGl2IHN0eWxlPSJmb250LXdlaWdodDpib2xkIj4kJHtfMHg2Yy5haG9yYXx8XzB4NmMuYW50ZXN9PC9kaXY+CiAgICAgICAgPGRpdiBzdHlsZT0iZGlzcGxheTpmbGV4O2dhcDo4cHg7bWFyZ2luLXRvcDo2cHgiPgogICAgICAgICAgPGJ1dHRvbiBjbGFzcz0icXR5LWJ0biIgb25jbGljaz0iXzB4MjcoJHtfMHg2OH0sLTEpIj4tPC9idXR0b24+PHNwYW4+JHtfMHg2Yy5jYW50fTwvc3Bhbj48YnV0dG9uIGNsYXNzPSJxdHktYnRuIiBvbmNsaWNrPSJfMHgyNygyJHtfMHg2OH0sMSkiPis8L2J1dHRvbj4KICAgICAgICA8L2Rpdj48L2Rpdj48YnV0dG9uIG9uY2xpY2s9Il8weDQyLnNwbGljZSgke18weDY4fSwxKTtfMHgyOCgpIiBzdHlsZT0iYmFja2dyb3VuZDojZDUwMDAwO2NvbG9yOiNmZmY7Ym9yZGVyOm5vbmU7cGFkZGluZzo2cHggMTBweDtib3JkZXItcmFkaXVzOjZweCI+WDwvYnV0dG9uPjwvZGl2PmA7fSk7fWZ1bmN0aW9uIF8weDFiKCl7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NhcnRNb2RhbCcpLmNsYXNzTGlzdC5hZGQoJ3Nob3cnKTtzZXRUaW1lb3V0KCgpPT57XzB4MmEoKTt9LDMwMCk7fWZ1bmN0aW9uIF8weDJiKF8weDZjLF8weDcwKXtsZXQgXzB4NzE9XzB4NmMubGF0LF8weDcyPV8weDZjLmxuZyxfMHg3Mz1mYWxzZTtmb3IobGV0IF8weDQ9MCxfMHg3NV89XzB4NzAubGVuZ3RoLTE7XzB4NzQ8XzB4NzAubGVuZ3RoO18weDc1PV8weDQrKyl7bGV0IF8weDc2PV8weDcwW18weDQ1XVswXSxfMHg3Nz1fMHg3MFtfMHg3NF1bMV0sXzB4Nzg9XzB4NzBbXzB4NzVdWzBdLF8weDc5PV8weDcwW18weDc1XVsxXTtsZXQgXzB4N2E9KChfMHg3Nz5fMHg3MikhaT0oXzB4Nzk+XzB4NzIpKSYmKF8weDcxPChfMHg3OC1fMHg3NikqKF8weDcyLV8weDc3KS8oXzB4NzktXzB4NzcpK18weDc2KTtpZihfMHg3YSlfeDA3Mz0hXzB4NzM7fXJldHVybiBfMHg3Mzt9ZnVuY3Rpb24gXzB4MmEoKXtpZighXzB4NDQpe18weDQ0PUwubWFwKCdtYXAnKS5zZXRWaWV3KFsxNy4wODUsLTk2Ljc1NV0sMTMuNSk7TC50aWxlTGF5ZXIoJ2h0dHBzOi8ve3N9LnRpbGUub3BlbnN0cmVldG1hcC5vcmcve3p9L3t4fS97eX0ucG5nJykuYWRkVG8oXzB4NDQpO18weDQ2PUwucG9seWdvbihfMHgzYix7Y29sb3I6JyMxZTg4ZTUnLGZpbGxDb2xvcjonIzFlODhlNSdsLGZpbGxPcGFjaXR5OjAuM30pLmFkZFRvKF8weDQ0KTtfMHg0NC5vbignY2xpY2snLF8weDdjPT57aWYoIV8weDJiKF8weDdjLmxhdGxuZyxfMHgzYikpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdmsgJy50ZXh0Q29udGVudD0n4p2MIUZ1ZXJhIGRlIGNvYmVydHVyYSc7XzB4NDc9bnVsbDtpZihfMHg0NSlfMHg0NC5yZW1vdmVMYXllcihfMHg0NSk7cmV0dXJuO31kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbXNnJykudGV4dENvbnRlbnQ9Jyc7XzB4NDc9XzB4N2MubGF0bG5nO2lmKF8weDQ1KV8weDQ0LnJlbW92ZUxheWVyKF8weDQ1KTtfMHg0NT1MLm1hcmtlcihfMHg3Yy5sYXRsbmcpLmFkZFRvKF8weDQ0KTt9KTt9XzB4NDQuaW52YWxpZGF0ZVNpemUoKTtfMHg0NC5maXRCb3VuZHMoXzB4NDYuZ2V0Qm91bmRzKCkpO31mdW5jdGlvbiBfMHgxYygpe2lmKCFfMHg0Myl7YWxlcnQoJ0NFUlJBRE8nKTtyZXR1cm47fWlmKCFfMHg0Mi5sZW5ndGgpe2FsZXJ0KCdDYXJyaXRvIHZhY2lvJyk7cmV0dXJuO31pZighXzB4NDcpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdmsgJy50ZXh0Q29udGVudD0nTWFyY2EgdHUgdWJpY2FjaW9uJztyZXR1cm47fWlmKCFfMHgyYihfMHg0NyxfMHgzYikpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdmsgJy50ZXh0Q29udGVudD0nRnVlcmEgZGUgY29iZXJ0dXJhJztyZXR1cm47fWxldCBfMHg3ZD0nUEVESURPOiUwQSc7XzB4NDIuZm9yRWFjaChfMHg2Yz0+XzB4N2QrPV8weDZjLmltZythJyAnKyhfMHg2Yy5haG9yYXx8XzB4NmMuYW50ZXMpKyd4JytfMHg2Yy5jYW50KyclMEEnKTtfMHg3ZCs9YFRPVEFMICR7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3RvdDInKS50ZXh0Q29udGVudH0lMEF9O18weDdkKz1gTUFQQTogaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS9tYXBzP3E9JHtfMHg0Ny5sYXR9LCR7XzB4NDcubG5nfSUwQTtgO3dpbmRvdy5vcGVuKGAgaHR0cHM6Ly93YS5tZS81MjE1NjQ0Mjc2MDMyP3RleHQ9JHtfMHg3ZH1gLCdfYmxhbmsnKTt9YXN5bmMgZnVuY3Rpb24gXzB4MzAoKXtsZXQgXzB4N2Y9YXdhaXQgZmV0Y2goXzB4M2EpLF8weDgwPWF3YWl0IF8weDdmLnRleHQoKTt9'));</script></body></html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Delivery El Punto</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#121212;color:#fff;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:12px}
+.cnt{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px}
+h2{font-size:17px;text-align:center;margin-bottom:2px}
+.img-box{width:100%;height:210px;background:#222;border-radius:10px;overflow:hidden;position:relative;border:1px solid #333}
+.img-box img{width:100%;height:100%;object-fit:cover}
+.btn-wsp-flotante{position:absolute;bottom:10px;left:10px;right:10px;background:#25D366;color:#fff;padding:10px;border-radius:6px;text-align:center;font-weight:bold;text-decoration:none;font-size:14px;box-shadow:0 4px 10px rgba(0,0,0,0.6);z-index:5}
+.btn-est{padding:10px;font-size:14px;font-weight:bold;border:none;border-radius:8px;cursor:pointer;text-align:center;user-select:none;width:100%}
+.c-err{background:#d9534f;color:#fff}
+.c-ab{background:#5cb85c;color:#fff}
+.nav-sec{display:flex;flex-direction:column;gap:10px;width:100%}
+.nav-btn{width:100%;padding:12px;background:#ff9800;color:#000;font-weight:bold;border:none;border-radius:8px;font-size:15px;cursor:pointer;text-align:center}
+#v-cnt{display:none;width:100%;height:75vh;background:#fff;border-radius:10px;overflow:hidden;position:relative;margin-top:2px}
+#v-cnt iframe{width:100%;height:100%;border:none}
+.c-v{position:absolute;top:5px;right:5px;background:#000;color:#fff;border:none;padding:6px 12px;border-radius:5px;font-weight:bold;cursor:pointer;z-index:10;font-size:13px}
+</style>
+</head>
+<body>
+<div class="cnt">
+<h2>Delivery El Punto</h2>
+
+<!-- Elementos que se ocultan al abrir un visor para dar espacio total -->
+<div id="panel-principal" class="nav-sec">
+<div class="img-box">
+<!-- La imagen lee directo de la variable configurada según tu Sheet -->
+<img id="imgA1" src="https://i.ibb.co/S7t5K5rF/26639.jpg" alt="Portada">
+<a class="btn-wsp-flotante" href="https://wa.me/525644276032?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank">💬 Chat Directo WhatsApp</a>
+</div>
+
+<button id="bEst" class="btn-est c-err" ontouchstart="_t=setTimeout(_s,1000);" ontouchend="clearTimeout(_t);" onmousedown="_t=setTimeout(_s,1000);" onmouseup="clearTimeout(_t);">CERRADO</button>
+
+<button class="nav-btn" onclick="_v('https://cartelera-oaxaca.github.io/Coberturaelpunto/')">🗺️ Ver Cobertura</button>
+<button class="nav-btn" onclick="_v('https://super-delivery-elpunto.netlify.app/')">📦 Ver Catálogo</button>
+</div>
+
+<!-- Visor en Pantalla Amplia -->
+<div id="v-cnt">
+<button class="c-v" onclick="_cv()">✖ Cerrar y Volver</button>
+<iframe id="mF" src=""></iframe>
+</div>
+</div>
+
+<script>
+// Configuración de URLs basada en tu estructura de datos (Hoja 1)
+const CONFIG = {
+    imagenPortada: "https://i.ibb.co/S7t5K5rF/26639.jpg", // Aquí puedes cambiar la URL de la imagen cuando gustes
+    urlCobertura: "https://cartelera-oaxaca.github.io/Coberturaelpunto/",
+    urlCatalogo: "https://super-delivery-elpunto.netlify.app/"
+};
+
+// Aplicar imagen de portada al cargar
+document.getElementById('imgA1').src = CONFIG.imagenPortada;
+
+// Cargar estado guardado para que no se borre al recargar
+let _st = localStorage.getItem('_estadoNegocio') === 'true';
+let _t;
+
+function actualizarUI() {
+    let e = document.getElementById('bEst');
+    if(_st){
+        e.className="btn-est c-ab";
+        e.innerText="ABIERTO";
+    } else {
+        e.className="btn-est c-err";
+        e.innerText="CERRADO";
+    }
+}
+actualizarUI();
+
+function _s(){
+    _st = !_st;
+    localStorage.setItem('_estadoNegocio', _st);
+    actualizarUI();
+}
+
+function _v(tipo){
+    let u = (tipo === 'cob') ? CONFIG.urlCobertura : CONFIG.urlCatalogo;
+    // Oculta portada, botones y estado para dejar espacio limpio al visor
+    document.getElementById('panel-principal').style.display = 'none';
+    let v = document.getElementById('v-cnt');
+    let m = document.getElementById('mF');
+    m.src = u;
+    v.style.display = "block";
+}
+
+// Actualizamos los botones con los parámetros correctos
+document.querySelectorAll('.nav-btn')[0].setAttribute("onclick", "_v('cob')");
+document.querySelectorAll('.nav-btn')[1].setAttribute("onclick", "_v('cat')");
+
+function _cv(){
+    let v = document.getElementById('v-cnt');
+    let m = document.getElementById('mF');
+    m.src = "";
+    v.style.display = "none";
+    // Regresa los botones y la portada original
+    document.getElementById('panel-principal').style.display = 'flex';
+}
+</script>
+</body>
+</html>
