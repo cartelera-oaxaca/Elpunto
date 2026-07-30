@@ -5,119 +5,219 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Delivery El Punto</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-body{background:#090d16;color:#f8fafc;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:16px;padding-bottom:110px}
-.cnt{width:100%;max-width:400px;display:flex;flex-direction:column;gap:14px}
-h2{font-size:20px;font-weight:700;text-align:center;letter-spacing:0.5px;color:#f1f5f9;margin-top:4px}
-.img-box{width:100%;height:230px;background:#1e293b;border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.08);box-shadow:0 10px 25px -5px rgba(0,0,0,0.5)}
-.img-box img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
-.img-box:hover img{transform:scale(1.03)}
-.btn-wsp-flotante{position:absolute;bottom:14px;left:14px;right:14px;background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);color:#fff;padding:12px;border-radius:12px;text-align:center;font-weight:700;text-decoration:none;font-size:14px;box-shadow:0 6px 20px rgba(22,163,74,0.4);z-index:5;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);border:1px solid rgba(255,255,255,0.15)}
-.btn-wsp-flotante:active{transform:scale(0.97)}
-.btn-est{padding:14px;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;text-align:center;user-select:none;width:100%;box-shadow:0 4px 15px rgba(0,0,0,0.3);transition:all 0.3s ease;letter-spacing:1px}
-.c-err{background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%);color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 20px rgba(239,68,68,0.3)}
-.c-ab{background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:#fff;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 20px rgba(16,185,129,0.3)}
-.nav-sec{display:flex;flex-direction:column;gap:14px;width:100%}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
-/* Contenedor inferior flotante estilo Glassmorphism */
-.contenedor-botones-inferior {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+/* Pantalla completa absoluta, sin scrolls molestos */
+html, body {
     width: 100%;
-    padding: 14px 20px;
-    background: rgba(9, 13, 22, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 20px;
-    z-index: 1000;
-    box-sizing: border-box;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Botones redondos de alta gama con relieve */
-.btn-redondo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+/* Contenedor principal que respeta la imagen tal cual sin recortarla */
+.lienzo-fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    z-index: 1;
+}
+
+.lienzo-fondo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Esto evita que se recorte o haga zoom deforme */
+    display: block;
+}
+
+/* --- BOTÓN SUPERIOR: Abierto / Cerrado --- */
+.btn-estado {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    z-index: 10;
+    user-select: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.1s ease;
+}
+
+.btn-estado:active {
+    transform: scale(0.92);
+}
+
+.c-abierto {
+    background: #10b981;
     color: #fff;
-    font-size: 24px;
+}
+
+.c-cerrado {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* --- BOTONES INFERIORES FLOTANTES --- */
+.panel-inferior {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+.item-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    gap: 6px;
+}
+
+.icono-contenedor {
+    width: 55px;
+    height: 55px;
+    background: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+    transition: transform 0.2s ease;
+}
+
+.item-menu:active .icono-contenedor {
+    transform: scale(0.9);
+}
+
+.texto-menu {
+    font-size: 11px;
+    font-weight: 600;
+    color: #fbbf24; /* Tono dorado acorde a tu diseño */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+    letter-spacing: 0.5px;
+}
+
+/* --- VISOR DE PANTALLA COMPLETA (Iframes para Cobertura/Catálogo) --- */
+#v-cnt {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #090d16;
+    z-index: 100;
+}
+
+#v-cnt iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.c-v {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(15, 23, 42, 0.9);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 110;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
-
-.btn-redondo:active {
-    transform: scale(0.90);
-    box-shadow: 0 2px 10px rgba(217, 119, 6, 0.3);
-}
-
-#v-cnt{display:none;width:100%;height:78vh;background:#1e293b;border-radius:18px;overflow:hidden;position:relative;margin-top:2px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 15px 35px rgba(0,0,0,0.6)}
-#v-cnt iframe{width:100%;height:100%;border:none}
-.c-v{position:absolute;top:10px;right:10px;background:rgba(15, 23, 42, 0.85);backdrop-filter:blur(8px);color:#fff;border:1px solid rgba(255,255,255,0.15);padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;z-index:10;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.4);transition:all 0.2s ease}
-.c-v:active{transform:scale(0.95)}
 </style>
 </head>
 <body>
-<div class="cnt">
-<h2>Delivery El Punto</h2>
 
-<!-- Elementos que se ocultan al abrir un visor para dar espacio total -->
-<div id="panel-principal" class="nav-sec">
-<div class="img-box">
-<!-- La imagen lee directo de la variable configurada según tu Sheet -->
-<img id="imgA1" src="https://i.ibb.co/S7t5K5rF/26639.jpg" alt="Portada">
-<a class="btn-wsp-flotante" href="https://wa.me/525644276032?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank">💬 Chat Directo WhatsApp</a>
+<!-- Fondo principal: La imagen manda exactita sin recortes -->
+<div class="lienzo-fondo">
+    <img id="imgPortada" src="https://i.ibb.co/Sk9yp8C/26392.jpg" alt="El Punto Delivery">
 </div>
 
-<button id="bEst" class="btn-est c-err" ontouchstart="_t=setTimeout(_s,1000);" ontouchend="clearTimeout(_t);" onmousedown="_t=setTimeout(_s,1000);" onmouseup="clearTimeout(_t);">CERRADO</button>
+<!-- Botón Superior de Estado (Abierto / Cerrado con mantenimiento presionado) -->
+<button id="bEst" class="btn-estado c-cerrado" 
+    ontouchstart="_t=setTimeout(_s,1000);" ontouchend="clearTimeout(_t);" 
+    onmousedown="_t=setTimeout(_s,1000);" onmouseup="clearTimeout(_t);">
+    CERRADO
+</button>
+
+<!-- Botones Inferiores Flotantes -->
+<div class="panel-inferior">
+    <!-- Chat Directo WhatsApp -->
+    <a class="item-menu" href="https://wa.me/525644276032?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank">
+        <div class="icono-contenedor">💬</div>
+        <span class="texto-menu">Chat directo</span>
+    </a>
+
+    <!-- Cobertura -->
+    <button class="item-menu" onclick="_v('cob')">
+        <div class="icono-contenedor">📍</div>
+        <span class="texto-menu">Cobertura</span>
+    </button>
+
+    <!-- Catálogo -->
+    <button class="item-menu" onclick="_v('cat')">
+        <div class="icono-contenedor">🛒</div>
+        <span class="texto-menu">Catálogo</span>
+    </button>
 </div>
 
-<!-- Visor en Pantalla Amplia -->
+<!-- Visor Dinámico para Cobertura / Catálogo -->
 <div id="v-cnt">
-<button class="c-v" onclick="_cv()">✖ Cerrar y Volver</button>
-<iframe id="mF" src=""></iframe>
-</div>
-</div>
-
-<!-- Botones redondos fijos en la parte inferior con toda la lógica intacta -->
-<div class="contenedor-botones-inferior">
-    <button class="btn-redondo" onclick="_v('cob')" title="Ver Cobertura">📍</button>
-    <button class="btn-redondo" onclick="_v('cat')" title="Ver Catálogo">🏷</button>
+    <button class="c-v" onclick="_cv()">✖ Cerrar</button>
+    <iframe id="mF" src=""></iframe>
 </div>
 
 <script>
-// Configuración de URLs basada en tu estructura de datos (Hoja 1)
+// Configuración de URLs y recursos
 const CONFIG = {
-    imagenPortada: "https://i.ibb.co/60CyYmVR/26768.jpg", // Aquí puedes cambiar la URL de la imagen cuando gustes
+    imagenFondo: "https://i.ibb.co/Sk9yp8C/26392.jpg", // Cambia aquí si actualizas tu flyer
     urlCobertura: "https://cartelera-oaxaca.github.io/Coberturaelpunto/",
     urlCatalogo: "https://super-delivery-elpunto.netlify.app/"
 };
 
-// Aplicar imagen de portada al cargar
-document.getElementById('imgA1').src = CONFIG.imagenPortada;
+// Cargar imagen de fondo
+document.getElementById('imgPortada').src = CONFIG.imagenFondo;
 
-// Cargar estado guardado para que no se borre al recargar
+// Lógica de Estado (Abierto/Cerrado con persistencia local)
 let _st = localStorage.getItem('_estadoNegocio') === 'true';
 let _t;
 
 function actualizarUI() {
     let e = document.getElementById('bEst');
     if(_st){
-        e.className="btn-est c-ab";
-        e.innerText="ABIERTO";
+        e.className = "btn-estado c-abierto";
+        e.innerText = "Abierto";
     } else {
-        e.className="btn-est c-err";
-        e.innerText="CERRADO";
+        e.className = "btn-estado c-cerrado";
+        e.innerText = "Cerrado";
     }
 }
 actualizarUI();
@@ -128,24 +228,23 @@ function _s(){
     actualizarUI();
 }
 
+// Lógica para abrir secciones flotantes en pantalla completa
 function _v(tipo){
     let u = (tipo === 'cob') ? CONFIG.urlCobertura : CONFIG.urlCatalogo;
-    // Oculta portada y estado para dar espacio limpio al visor
-    document.getElementById('panel-principal').style.display = 'none';
     let v = document.getElementById('v-cnt');
     let m = document.getElementById('mF');
     m.src = u;
     v.style.display = "block";
 }
 
+// Lógica para cerrar visor y volver al diseño principal
 function _cv(){
     let v = document.getElementById('v-cnt');
     let m = document.getElementById('mF');
     m.src = "";
     v.style.display = "none";
-    // Regresa la portada original
-    document.getElementById('panel-principal').style.display = 'flex';
 }
 </script>
+
 </body>
 </html>
